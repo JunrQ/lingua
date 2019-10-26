@@ -1,0 +1,7 @@
+/data/
+
+# Some git
+/dataset/pdfminer
+
+# python
+*.pyc
