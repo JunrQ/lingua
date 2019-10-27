@@ -4,12 +4,12 @@
 
 import os
 
-def list_files(directory, prefix='', suffix=''):
-  """List all files under directory with specified prefix and suffix.
+def list_files(directories, prefix='', suffix=''):
+  """List all files under directories with specified prefix and suffix.
 
   Parameters
   ----------
-  directory : str
+  directories : str
     Directory to traverse.
   prefix : str, optional
     Prefix of files.
@@ -20,15 +20,20 @@ def list_files(directory, prefix='', suffix=''):
   ------
   files_list : `list` of files
   """
-  if not os.path.isdir(directory):
-    raise ValueError("%s is not a directory")
+  if not isinstance(directories, list):
+    directories = [directories]
+  for d in directories:
+    if not os.path.isdir(d):
+      raise ValueError("%s is not a directory")
   files_list = []
-  for f in os.listdir(directory):
-    if len(prefix):
-      if not f.startswith(prefix):
-        continue
-    if len(suffix):
-      if not f.endswith(suffix):
-        continue
-    files_list.append(os.path.join(directory, f))
+
+  for directory in directories:
+    for f in os.listdir(directory):
+      if len(prefix):
+        if not f.startswith(prefix):
+          continue
+      if len(suffix):
+        if not f.endswith(suffix):
+          continue
+      files_list.append(os.path.join(directory, f))
   return files_list

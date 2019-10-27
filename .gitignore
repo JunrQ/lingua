@@ -2,6 +2,10 @@
 
 # Some git
 /dataset/pdfminer
+/dataset/*.log
 
 # python
 *.pyc
+
+# vscode
+/.vscode/

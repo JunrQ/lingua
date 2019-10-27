@@ -14,6 +14,10 @@ class TextDataset(BaseDataset):
   def set_line_process_func(self, func):
     """Set function to process a line."""
     self._line_func = func
+  
+  def add_line_process_func(self, func):
+    """Add line processes function in a pipeline."""
+    self._added_line_func.append(func)
 
 
 class FilesTextDataset(TextDataset):
@@ -46,6 +50,7 @@ class FilesTextDataset(TextDataset):
     self._suffix = suffix
     self._file_list = list_files(self._paths, self._prefix, self._suffix)
     self._line_func = line_process_func
+    self._added_line_func = []
     def _int_if_bool(v):
       if isinstance(v, bool):
         v = 1 if v else 0
@@ -71,15 +76,11 @@ class FilesTextDataset(TextDataset):
           l = line_pool.pop(0)
           if self._line_func is not None:
             l = self._line_func(l)
-            if l:
-              yield l
-            else:
-              continue
-          else:
+          if len(self._added_line_func) > 0:
+            for tmp_f in self._added_line_func:
+              l = tmp_f(l)
+          if l:
             yield l
-
-
-
-
-
+          else:
+            continue
 
