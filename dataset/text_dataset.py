@@ -62,25 +62,31 @@ class FilesTextDataset(TextDataset):
     self._skip_head_line = _int_if_bool(skip_head_line)
     self._skip_tail_line = _int_if_bool(skip_tail_line)
 
+  @property
+  def files(self):
+    return self._file_list
+
+  def single_file_get_lines(self, fp):
+    line_pool = []
+    with open(fp, 'r') as f:
+      for i, l in enumerate(f.readlines()):
+        if i < self._skip_head_line:
+          continue
+        if len(line_pool) < self._skip_tail_line:
+          line_pool.append(l)
+          continue
+        line_pool.append(l)
+        l = line_pool.pop(0)
+        if self._line_func is not None:
+          l = self._line_func(l)
+        if len(self._added_line_func) > 0:
+          for tmp_f in self._added_line_func:
+            l = tmp_f(l)
+        if l:
+          yield l
+        else:
+          continue
+
   def get_lines(self):
     for fp in self._file_list:
-      line_pool = []
-      with open(fp, 'r') as f:
-        for i, l in enumerate(f.readlines()):
-          if i < self._skip_head_line:
-            continue
-          if len(line_pool) < self._skip_tail_line:
-            line_pool.append(l)
-            continue
-          line_pool.append(l)
-          l = line_pool.pop(0)
-          if self._line_func is not None:
-            l = self._line_func(l)
-          if len(self._added_line_func) > 0:
-            for tmp_f in self._added_line_func:
-              l = tmp_f(l)
-          if l:
-            yield l
-          else:
-            continue
-
+      self.single_file_get_lines(fp)

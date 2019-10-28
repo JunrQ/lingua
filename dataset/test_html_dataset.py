@@ -38,7 +38,9 @@ if __name__ == "__main__":
 
   # - Test 3
   pdf_txt_ds = get_pdf2html2txt_result_dataset()
-  for l in pdf_txt_ds.get_lines():
-    print(l)
-    
-
+  for f in pdf_txt_ds.files:
+    # import pdb; pdb.set_trace()
+    print("%s -> %s" % (f, f + '.refine1028'))
+    with open(f + '.refine1028', 'w') as target_f:
+      for l in pdf_txt_ds.single_file_get_lines(f):
+        target_f.write(l.strip() + '\n')

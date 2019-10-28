@@ -28,6 +28,7 @@ def get_pdf2html2txt_result_dataset():
   pdf_txt_ds = FilesTextDataset(direcotries, suffix='.txt',
                                 skip_head_line=1, skip_tail_line=1)
   pdf_txt_ds.add_line_process_func(encode_decode_rm_specified_code)
-  pdf_txt_ds.add_line_process_func(partial(connect_some_f_pattern, infix='fi'))
-  pdf_txt_ds.add_line_process_func(partial(connect_some_f_pattern, infix='ff'))
+  # pdf_txt_ds.add_line_process_func(partial(connect_some_f_pattern, infix='fi'))
+  # pdf_txt_ds.add_line_process_func(partial(connect_some_f_pattern, infix='ff'))
   return pdf_txt_ds
+

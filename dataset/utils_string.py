@@ -49,17 +49,21 @@ def encode_decode_rm_specified_code(text):
   """
   byte_rep = text.encode()
   byte_rmed_list = []
-  for b in byte_rep:
-    if b == 239:
-      byte_rmed_list.append(102)
-    elif b == 172:
+  for i, b in enumerate(byte_rep):
+    if i < len(byte_rep) - 2 and b == 239 and byte_rep[i + 1] == 172 \
+        and byte_rep[i + 2] == 129:
       byte_rmed_list.append(105)
-    elif b == 129:
-      pass
-    elif b >=0 and b <= 126:
+      byte_rmed_list.append(102)
+      continue
+    if i > 0 and b == 172 and i < len(byte_rep) - 1 and byte_rep[i - 1] == 239 \
+        and byte_rep[i + 1] == 129:
+      continue
+    if b == 129 and i > 1 and byte_rep[i - 1] == 172 and byte_rep[i - 2] == 172:
+        continue
+    if b >=0 and b <= 126:
       byte_rmed_list.append(b)
-    else:
-      byte_rmed_list.append(32)
+      continue
+    byte_rmed_list.append(32)
   byte_rep = bytes(byte_rmed_list)
   text = byte_rep.decode('utf-8')
   return text
@@ -72,11 +76,11 @@ def connect_some_f_pattern(text, infix='fi'):
   ' nd ' -> ' find ' if infix='fi'
   """
   # TODO(zcq) May be very slow
-  spe_wrods = [w for w in english_vocab if infix in w]
+  spe_wrods = [w for w in dataset_utils_string_english_vocab if infix in w]
   for w in spe_wrods:
     idx = w.find(infix)
     pre = w[:idx]
     suf = w[idx + len(infix):]
-    text = re.sub(r'\s+%s\s{1,5}%s\s+' % (pre, suf), ' %sfi%s ' % (pre, suf), text)
+    text = re.sub(r'\s+%s\s{1,3}%s\s+' % (pre, suf), ' %sfi%s ' % (pre, suf), text)
   return text
 

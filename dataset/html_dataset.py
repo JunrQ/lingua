@@ -75,8 +75,6 @@ class HTMLDataset(BaseDataset):
     """
     for text in text_list:
       text = multi_spaces_to_one(text.strip())
-      # if '' in text:
-      #   import pdb; pdb.set_trace()
       if not len(text.split()) > self._minimum_words:
         continue
       if not len(text) > self._minimum_length:
