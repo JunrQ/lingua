@@ -90,3 +90,18 @@ class FilesTextDataset(TextDataset):
   def get_lines(self):
     for fp in self._file_list:
       self.single_file_get_lines(fp)
+
+
+def SingleFileTextDataset(TextDataset):
+  """Process single file."""
+  def __init__(self, file_name):
+    """Get text from one single file.
+
+    Parameters
+    ----------
+    file_name : str
+      Path of the file.
+    """
+    self._file_name = file_name
+
+
