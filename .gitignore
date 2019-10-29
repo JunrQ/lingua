@@ -9,3 +9,6 @@
 
 # vscode
 /.vscode/
+
+# Some model files
+/nlp/embedding/model
