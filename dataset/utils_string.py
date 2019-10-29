@@ -84,3 +84,26 @@ def connect_some_f_pattern(text, infix='fi'):
     text = re.sub(r'\s+%s\s{1,3}%s\s+' % (pre, suf), ' %sfi%s ' % (pre, suf), text)
   return text
 
+def get_center_and_context(word_list, windows=0, filter_func=None):
+  """Get center word and its context from a word list.
+
+  Parameters
+  ----------
+  word_list : list of str
+    Input word list.
+  windows : int
+    The window length, if 0, means window = lenght of word_list
+  filter_func : callable object
+    If not None, for every word in word_list, abandon the word when
+    this function return fasle.
+
+  Returns
+  -------
+  list of (center_word, context_words_list)
+  """
+  if window and window % 2 != 1:
+    raise ValueError("window should be odd to make sure there is one "
+                      "center word, but got %d" % window)
+
+
+
