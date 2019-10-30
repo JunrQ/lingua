@@ -2,6 +2,7 @@
 
 from lingua.nlp.embedding.word2vec import W2VModel, \
   GooglePretrainedW2V
+from lingua.dataset.utils_string import get_center_and_context
 
 
 class SentenceMetrics(object):
@@ -48,7 +49,18 @@ class W2CSentenceIntegrity(SentenceIntegrity):
     if not isinstance(input_text, str):
       raise ValueError("str excepted, but got %s" % type(input_text))
 
-    word_prob_list =  self._model.model.predict_output_word(
-                          context_words_list, self._num_pred_words)
+    # TODO(zcq) Filter out words that do not exists in w2v model
+    input_words_list = 
+
+    for center_w, context_words_list in get_center_and_context(input_words_list)
+
+      word_prob_list =  self._model.model.predict_output_word(
+                            context_words_list, self._num_pred_words)
+      
+
+      for cur_cent_w, cur_p in word_prob_list:
+        # Calculate distance between predicted center word and real center word
+        # Use probablity as weight to get a weighted sum
+        
 
 
