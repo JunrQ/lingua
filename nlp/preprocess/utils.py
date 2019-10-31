@@ -12,6 +12,8 @@ import enchant
 
 
 def _class_decorator(name):
+  # Make a function a class
+  # TODO(zcq) May loss doc.
   def _func_decorator(func):
     def _wrapper(self, *args, **kwrags):
       return func(*args, **kwrags)
@@ -21,13 +23,13 @@ def _class_decorator(name):
   return _func_decorator
     
 
-
+@_class_decorator('get_single_letter_words_pattern')
 def get_single_letter_words_pattern():
   return re.compile(r'(?<![\w\-])\w(?![\w\-])')
 
 
-
 # ---------------------- Text functions -----------------------
+@_class_decorator('sentence_tokenize')
 def sentence_tokenize(text):
   """Tokenize text into sentences."""
   return nltk_sent_tokenize(text)
@@ -65,6 +67,7 @@ class replace_abbr_not(object):
 
 
 # -------------------- Sentence list functions ----------------
+@_class_decorator('word_tokenize')
 def word_tokenize(sentence, pt_tokenizer=True, separate_punc=True):
   """Tokenize sentence into words.
 
@@ -86,29 +89,35 @@ def word_tokenize(sentence, pt_tokenizer=True, separate_punc=True):
 
 
 # --------------------- Word list functions -------------------
-def remove_stop_words(words):
-  english_stops = set(stopwords.words('english'))
-  return [w for w in words if w.lower() not in english_stops]
+class remove_stop_words(object):
+  def __init__(self):
+    self._english_stops = set(stopwords.words('english'))
+  def __call__(self, words):
+    return [w for w in words if w.lower() not in self._english_stops]
 
 
 
 
 # -------------------------- Word -----------------------------
-def word_stem(word, algorithm='porter'):
-  """Stemming."""
-  support_algorithm = {
-    'porter' : PorterStemmer,
-    'lancaster' : LancasterStemmer,
-  }
-  if algorithm not in support_algorithm:
-    raise ValueError("Supported stemming algorithms: %s, but got %s" % (
-      str(support_algorithm.keys(), algorithm)))
-  stemmer = support_algorithm[algorithm]()
-  return stemmer.stem(word)
+class word_stem(object):
+  def __init__(self):
+    self._support_algorithm = {
+      'porter' : PorterStemmer,
+      'lancaster' : LancasterStemmer,
+    }
+  def __call__(self, word, algorithm='porter'):
+    """Stemming."""
+    if algorithm not in self._support_algorithm:
+      raise ValueError("Supported stemming algorithms: %s, but got %s" % (
+        str(self._support_algorithm.keys(), algorithm)))
+    stemmer = self._support_algorithm[algorithm]()
+    return stemmer.stem(word)
 
-def word_lemmatizing(word, pos='n')
-  lemmatizer = WordNetLemmatizer()
-  return lemmatizer.lemmatize(word, pos=pos)
+class word_lemmatizing(object):
+  def __init__(self):
+    self._lemmatizer = WordNetLemmatizer()
+  def __call__(self, word, pos='n'):
+    return self._lemmatizer.lemmatize(word, pos=pos)
 
 def replace_repeat_letters(word):
   """Replace repeated letters.
@@ -126,7 +135,20 @@ def replace_repeat_letters(word):
   else:
     return repl_word
 
-def correct_spelling(word):
+class correct_spelling(object):
+  def __init__(self, dict_name='en', max_dist=2):
+    self._spell_dict = enchant.Dict(dict_name)
+    self._max_dist = max_dist
+  def __call__(self, word):
+    if self._spell_dict.check(word):
+      return word
+    suggestions = self._spell_dict.suggest(word)
+    if suggestions and edit_distance(word, suggestions[0]) \
+        <= self._max_dist:
+      return suggestions[0]
+    else:
+      return word
+
 
 
 

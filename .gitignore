@@ -12,3 +12,5 @@
 
 # Some model files
 /nlp/embedding/model
+
+/.DS_Store
