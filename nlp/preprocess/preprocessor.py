@@ -1,7 +1,6 @@
 """Preprocessor for NLP."""
 
 
-
 class Processor(object):
   """BaseProcessor class.
   """
@@ -9,12 +8,25 @@ class Processor(object):
     self._funcs = []
   
   def add_func(self, func):
-    self._funcs.append(func)
+    if isinstance(func, list):
+      for f in func:
+        self._funcs.append(f)
+    else:
+      self._funcs.append(func)
 
-  def __call__(self, input):
+  def __call__(self, input, debug=False):
     for f in self._funcs:
-      input = f(input)
+      output = f(input)
+      if debug:
+        print("[%s]\n[before] %s\n[after] %s" % (
+          'noname' if not hasattr(f, 'name') else f.name,
+          str(input),
+          str(output)
+        ))
+      input = output
     return input
+
+
 
 class TextProcessor(Processor):
   def __call__(self, input):
@@ -28,12 +40,4 @@ class ListProcessor(Processor):
     if not isinstance(input, list):
       raise ValueError("Only support input list, but got %s" % type(input))
     return super(TextProcessor, self).__call__(input)
-
-
-
-
-
-
-
-
 

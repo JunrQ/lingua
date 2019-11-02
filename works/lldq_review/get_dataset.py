@@ -4,6 +4,7 @@ sys.path.insert(0, '../../../')
 import re
 
 from lingua.nlp.preprocess.utils import remove_pattern
+from lingua.nlp.preprocess.processor_ins import WordLevelProcessor
 
 def get_imdb_review(
     path='../../data/imdb/liulangdiqiu_imdb_review.txt'):
@@ -61,17 +62,15 @@ def get_youtube_review(
   return review
 
 
-
-
 if __name__ == '__main__':
   youtube_review = get_youtube_review()
   _, _, _, _, imdb_review = get_imdb_review()
 
   # TODO(zcq) 评论里有很多特殊单词，例如 sci-fi, emoji表情，OMG，LOL，其他语言
 
-  
+  review_processor = WordLevelProcessor()
 
-
-
-
+  for r in imdb_review:
+    review_processor(r, debug=True)
+    import pdb; pdb.set_trace()
 
