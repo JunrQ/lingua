@@ -72,22 +72,23 @@ if __name__ == '__main__':
 
   remove_new_line = partial(re.sub, r'\n\n+', '\n')
 
-  with open('lldq_youtube_review.txt', 'w') as f:
-    for r in youtube_review:
+  for i, r in enumerate(youtube_review):
+    with open('./youtube_sentiment_analysis/lldq_youtube_review_%d.txt' % i, 'w') as f:
       r = remove_new_line(r).strip()
       r = replace_abbr_not()(r)
       r = r.replace('Permalink', '')
       r = r.replace('\n', ' ')
-      # r = r.replace('sci-fi', 'science fiction')
+      r = r.replace('sci-fi', 'science fiction')
       f.write(r + '\n\n')
-  
-  with open('lldq_imdb_review.txt', 'w') as f:
-    for r in imdb_review:
+
+
+  for i, r in enumerate(imdb_review):
+    with open('./imdb_sentiment_analysis/lldq_imdb_review_%d.txt' % i, 'w') as f:
       r = r.replace('Warning: Spoilers', '')
       r = replace_abbr_not()(r)
       r = remove_new_line(r).strip()
       r = r.replace('\n', ' ')
-      # r = r.replace('sci-fi', 'science fiction')
+      r = r.replace('sci-fi', 'science fiction')
       f.write(r + '\n\n')
 
 

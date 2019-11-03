@@ -17,3 +17,7 @@
 
 # CoreNLP analysis result
 /nlp/sentiment/*.xml
+
+# Experiment result
+/works/lldq_review/imdb_sentiment_analysis/
+/works/lldq_review/youtube_sentiment_analysis/
