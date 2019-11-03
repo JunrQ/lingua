@@ -2,9 +2,13 @@
 import sys
 sys.path.insert(0, '../../../')
 import re
+from functools import partial
 
-from lingua.nlp.preprocess.utils import remove_pattern
+from lingua.nlp.preprocess.utils import remove_pattern, \
+    remove_single_letter_words, replace_abbr_not, \
+    replace_repeat_letters, correct_spelling
 from lingua.nlp.preprocess.processor_ins import WordLevelProcessor
+
 
 def get_imdb_review(
     path='../../data/imdb/liulangdiqiu_imdb_review.txt'):
@@ -66,11 +70,29 @@ if __name__ == '__main__':
   youtube_review = get_youtube_review()
   _, _, _, _, imdb_review = get_imdb_review()
 
-  # TODO(zcq) 评论里有很多特殊单词，例如 sci-fi, emoji表情，OMG，LOL，其他语言
+  remove_new_line = partial(re.sub, r'\n\n+', '\n')
 
-  review_processor = WordLevelProcessor()
+  with open('lldq_youtube_review.txt', 'w') as f:
+    for r in youtube_review:
+      r = remove_new_line(r).strip()
+      r = replace_abbr_not()(r)
+      r = r.replace('Permalink', '')
+      r = r.replace('\n', ' ')
+      # r = r.replace('sci-fi', 'science fiction')
+      f.write(r + '\n\n')
+  
+  with open('lldq_imdb_review.txt', 'w') as f:
+    for r in imdb_review:
+      r = r.replace('Warning: Spoilers', '')
+      r = replace_abbr_not()(r)
+      r = remove_new_line(r).strip()
+      r = r.replace('\n', ' ')
+      # r = r.replace('sci-fi', 'science fiction')
+      f.write(r + '\n\n')
 
-  for r in imdb_review:
-    review_processor(r, debug=True)
-    import pdb; pdb.set_trace()
+
+  # TODO(zcq) 评论里有很多特殊单词，例如 sci-fi, emoji表情, OMG, LOL, btw, 其他语言
+
+  # review_processor = WordLevelProcessor()
+
 

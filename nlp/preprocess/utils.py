@@ -26,6 +26,7 @@ def _class_decorator(name, use_func_name=False):
   return _func_decorator
 
 
+@_class_decorator('remove_single_letter_words')
 def remove_single_letter_words(text):
   return re.sub(r'(?<![\w\-])\w(?![\w\-])', '', text)
 
@@ -148,6 +149,8 @@ class word_lemmatizing(object):
   def __call__(self, word, pos='n'):
     return self._lemmatizer.lemmatize(word, pos=pos)
 
+
+# TODO
 def replace_repeat_letters(word):
   """Replace repeated letters.
   
