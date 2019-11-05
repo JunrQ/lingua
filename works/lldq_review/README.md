@@ -1,10 +1,12 @@
 # Pipeline
 
-* dataset
+**Get dataset**
 
+```shell
+python get_dataset.py
+```
 
-
-**Command line scripts**
+**Sentiment analysis**
 
 ```shell
 cd imdb_sentiment_analysis
@@ -19,4 +21,8 @@ for file in `ls lldq_youtube_review*.txt`; do
 done
 cd -
 ```
+
+**Organize result**
+
+
 

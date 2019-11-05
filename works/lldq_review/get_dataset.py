@@ -93,7 +93,3 @@ if __name__ == '__main__':
 
 
   # TODO(zcq) 评论里有很多特殊单词，例如 sci-fi, emoji表情, OMG, LOL, btw, 其他语言
-
-  # review_processor = WordLevelProcessor()
-
-
