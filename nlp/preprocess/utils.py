@@ -150,10 +150,10 @@ class word_lemmatizing(object):
     return self._lemmatizer.lemmatize(word, pos=pos)
 
 
-# TODO
+@_class_decorator('replace_repeat_letters')
 def replace_repeat_letters(word):
   """Replace repeated letters.
-  
+
   e.g.
   looooooove -> love
   """
@@ -163,7 +163,7 @@ def replace_repeat_letters(word):
   repl = r'\1\2\3'
   repl_word = repeat_regexp.sub(repl, word)
   if repl_word != word:
-    return replace_repeat_letters(word)
+    return replace_repeat_letters(repl_word)
   else:
     return repl_word
 
