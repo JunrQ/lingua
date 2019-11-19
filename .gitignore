@@ -13,7 +13,7 @@
 # Some model files
 /nlp/embedding/model
 
-/.DS_Store
+*DS_Store
 
 # CoreNLP analysis result
 /nlp/sentiment/*.xml
