@@ -4,14 +4,16 @@ import matplotlib.pyplot as plt
 from networkx.algorithms import community
 
 
-path = '/Users/junr/Documents/git/lingua/data/20191206-pdf/english.net'
+path = '/Users/junr/Documents/git/lingua/data/20191206-pdf/chinese.net'
 G = nx.readwrite.pajek.read_pajek(path, encoding='utf-8-sig')
 
 
 # Community detection
-communities_generator = community.girvan_newman(G)
-top_level_communities = next(communities_generator)
-next_level_communities = next(communities_generator)
+# communities_generator = community.girvan_newman(G)
+# top_level_communities = next(communities_generator)
+# next_level_communities = next(communities_generator)
+
+communities = community.greedy_modularity_communities(G)
 
 
 # Draw

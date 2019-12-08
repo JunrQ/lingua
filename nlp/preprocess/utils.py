@@ -123,7 +123,13 @@ class remove_stop_words(object):
     self.name = 'remove_stop_words'
     self._english_stops = set(stopwords.words('english'))
   def __call__(self, words):
-    return [w for w in words if w.lower() not in self._english_stops]
+    if isinstance(words, str):
+      if words in self._english_stops:
+        return ''
+      else:
+        return words
+    else:
+      return [w for w in words if w.lower() not in self._english_stops]
 
 
 # -------------------------- Word -----------------------------
