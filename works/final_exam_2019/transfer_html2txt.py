@@ -20,6 +20,9 @@ if __name__ == "__main__":
 
     if d.endswith('.DS_Store'):
       continue
+    
+    if not os.path.isdir(dp):
+      continue
 
     for f in list_files(dp, suffix='.pdf'):
       print(f)

@@ -42,7 +42,7 @@ def list_list_process_wrapper(func, list_list_input):
 def remove_len_less_than(input, minimum_length=1):
   """Remove elements with lenght less than minimum_length."""
   if isinstance(input, str):
-    raise ValueError("Except list of str, but got single string %s" 
+    raise ValueError("Expect list of str, but got single string %s" 
                       % input)
   if isinstance(input[0], str):
     res = []
@@ -140,14 +140,23 @@ class word_stem(object):
       raise ValueError("Supported stemming algorithms: %s, but got %s" % (
         str(self._support_algorithm.keys(), algorithm)))
     stemmer = self._support_algorithm[algorithm]()
-    return stemmer.stem(word)
+    if isinstance(word, (list, tuple)):
+      res = [stemmer.stem(w) for w in word]
+      return res
+    else:
+      return stemmer.stem(word)
+
 
 class word_lemmatizing(object):
   def __init__(self):
     self.name = word_lemmatizing
     self._lemmatizer = WordNetLemmatizer()
   def __call__(self, word, pos='n'):
-    return self._lemmatizer.lemmatize(word, pos=pos)
+    if isinstance(word, (list, tuple)):
+      res = [self._lemmatizer.lemmatize(w, pos=pos) for w in word]
+      return res
+    else:
+      return self._lemmatizer.lemmatize(word, pos=pos)
 
 
 @_class_decorator('replace_repeat_letters')
@@ -167,6 +176,7 @@ def replace_repeat_letters(word):
   else:
     return repl_word
 
+
 class correct_spelling(object):
   def __init__(self, dict_name='en', max_dist=2):
     self.name = 'correct_spelling'
@@ -181,4 +191,3 @@ class correct_spelling(object):
       return suggestions[0]
     else:
       return word
-
