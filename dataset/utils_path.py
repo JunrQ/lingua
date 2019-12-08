@@ -24,7 +24,7 @@ def list_files(directories, prefix='', suffix=''):
     directories = [directories]
   for d in directories:
     if not os.path.isdir(d):
-      raise ValueError("%s is not a directory")
+      raise ValueError("%s is not a directory" % d)
   files_list = []
 
   for directory in directories:

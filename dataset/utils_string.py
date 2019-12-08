@@ -76,13 +76,16 @@ def connect_some_f_pattern(text, infix='fi'):
   ' nd ' -> ' find ' if infix='fi'
   """
   # TODO(zcq) May be very slow
+  text = ' ' + text + ' '
   spe_wrods = [w for w in dataset_utils_string_english_vocab if infix in w]
   for w in spe_wrods:
     idx = w.find(infix)
     pre = w[:idx]
     suf = w[idx + len(infix):]
-    text = re.sub(r'\s+%s\s{1,3}%s\s+' % (pre, suf), ' %sfi%s ' % (pre, suf), text)
-  return text
+    text = re.sub(r'\s+%s\s{1,3}%s\s+' % (pre, suf), 
+                  ' %s%s%s ' % (pre, infix, suf), text,
+                  flags=re.IGNORECASE)
+  return text[1:-1]
 
 def get_center_and_context(word_list, windows=0, filter_func=None):
   """Get center word and its context from a word list.

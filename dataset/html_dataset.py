@@ -6,7 +6,8 @@ import os
 import re
 
 from lingua.dataset.dataset import BaseDataset
-from lingua.dataset.utils_string import multi_spaces_to_one
+from lingua.dataset.utils_string import multi_spaces_to_one, \
+    connect_some_f_pattern
 
 
 def _special_code_transformer(s):
@@ -75,6 +76,7 @@ class HTMLDataset(BaseDataset):
     """
     for text in text_list:
       text = multi_spaces_to_one(text.strip())
+      text = connect_some_f_pattern(text)
       if not len(text.split()) > self._minimum_words:
         continue
       if not len(text) > self._minimum_length:
