@@ -26,9 +26,8 @@ def work(net_path):
 
 
 if __name__ == '__main__':
-  path_zh = '/Users/junr/Documents/git/lingua/data/20191206-pdf/chinese.net'
-  work(path_zh)
+  # path_zh = '/Users/junr/Documents/git/lingua/data/20191206-pdf/chinese.net'
+  # work(path_zh)
 
   path_en = '/Users/junr/Documents/git/lingua/data/20191206-pdf/english.net'
   work(path_en)
-
